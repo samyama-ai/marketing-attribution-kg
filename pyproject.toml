@@ -1,0 +1,21 @@
+[project]
+name = "marketing-attribution-kg"
+version = "0.1.0"
+description = "Marketing measurement knowledge graph built on Samyama — claims, runs, datasets and the lineage behind a booked number"
+requires-python = ">=3.10"
+
+# Deliberately empty. The engine is reached over HTTP with `urllib` from the
+# standard library (etl/engine.py), the generators use `random` and `csv`, and
+# the tests read files. Nothing here needs `requests`, a driver, or a client
+# library — and a dependency list that names packages the code does not import
+# is the kind of claim this repo's tests exist to prevent.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+include = ["etl*", "data*", "queries*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

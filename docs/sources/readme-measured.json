@@ -1,0 +1,68 @@
+{
+  "code": {
+    "commit": "0325f08bb570a37c2c75bc74662d8aa64b8aa287",
+    "dirty": false
+  },
+  "url": "http://localhost:8322",
+  "nodes": 20102,
+  "edges": 78752,
+  "labels": 16,
+  "edge_types": 16,
+  "by_label": {
+    "Channel": 8,
+    "Claim": 19716,
+    "Dataset": 10,
+    "Decision": 2,
+    "GeoTest": 2,
+    "Market": 210,
+    "Method": 5,
+    "PLLine": 8,
+    "Period": 8,
+    "PlanningCycle": 2,
+    "Product": 65,
+    "Run": 41,
+    "Segment": 2,
+    "Source": 4,
+    "Spend": 16,
+    "Study": 3
+  },
+  "by_edge_type": {
+    "ABOUT": 39166,
+    "BOOKED_FROM": 8,
+    "CITED": 2,
+    "COMMISSIONED": 3,
+    "CONSUMED": 40,
+    "DERIVED_FROM": 7,
+    "DUE_FOR": 3,
+    "EXECUTED_AS": 41,
+    "EXECUTED_TEST": 2,
+    "EXTRACTED_FROM": 3,
+    "FOR": 19740,
+    "FOR_CYCLE": 2,
+    "IN_CYCLE": 2,
+    "ON": 16,
+    "PRODUCED": 19716,
+    "SUPERSEDES": 1
+  },
+  "hero_query": "MATCH (a:Claim)-[:ABOUT]->(ch:Channel)\nWHERE ch.name = \"Paid Social\" AND a.granularity = \"channel\"\n  AND a.metric = \"contribution\"\nWITH a, ch\nMATCH (a)-[:FOR]->(p:Period) WHERE p.id = \"2026-Q1\"\nWITH a, ch, p\nMATCH (ma:Method)-[:EXECUTED_AS]->(:Run)-[:PRODUCED]->(a) WHERE ma.kind = \"mmm\"\nWITH a, ch, p, ma\nMATCH (b:Claim)-[:ABOUT]->(ch)\nWHERE b.granularity = \"channel\" AND b.metric = \"contribution\"\nWITH a, ch, p, ma, b\nMATCH (b)-[:FOR]->(pb:Period) WHERE pb.id = \"2026-Q1\"\nWITH a, p, ma, b\nMATCH (mb:Method)-[:EXECUTED_AS]->(:Run)-[:PRODUCED]->(b) WHERE mb.kind = \"geo\"\nRETURN p.id, ma.kind, a.value, mb.kind, b.value,\n       abs(a.value - b.value) AS gap,\n       round(100.0 * abs(a.value - b.value) / a.value) AS gap_pct",
+  "hero_columns": [
+    "p.id",
+    "ma.kind",
+    "a.value",
+    "mb.kind",
+    "b.value",
+    "gap",
+    "gap_pct"
+  ],
+  "hero_rows": [
+    [
+      "2026-Q1",
+      "mmm",
+      2000000,
+      "geo",
+      1200000,
+      800000,
+      40
+    ]
+  ]
+}
